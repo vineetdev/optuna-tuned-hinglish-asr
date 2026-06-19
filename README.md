@@ -9,6 +9,40 @@ This repository implements an Optuna-tuned automatic speech recognition (ASR) sy
 - Targets real-world Hinglish technical tutorials (LibreOffice, Linux, software instructions) with mixed Devanagari and Roman scripts.
 - Achieves large WER/CER gains over the Whisper-medium baseline on a 100-sample evaluation set, with performance competitive with commercial ASR systems in this domain.[file:2]
 
+## Results
+
+All headline metrics below are computed on a 100-sample evaluation set.
+
+### Whisper Baseline vs LoRA Fine-Tuning
+
+| Model                                   | Setting                           | WER (↓) | CER (↓) |
+|-----------------------------------------|------------------------------------|--------:|--------:|
+| Whisper-medium (baseline)               | Pretrained, no fine-tuning        |  70.62  |  54.92  |
+| Whisper-medium + LoRA (3k samples)      | LoRA fine-tune, 3k training samples |  54.22  |  40.98  |
+| Whisper-medium + LoRA (Optuna best)     | Optuna-selected config, 10k samples |  36.46  |  30.94  |
+
+[file:2]
+
+Key observations:
+
+- LoRA fine-tuning alone provides a substantial improvement over the baseline Whisper-medium model.
+- The best Optuna-tuned configuration achieves a **~34 absolute WER reduction** relative to the baseline (from 70.62 to 36.46), representing a large relative error drop on this evaluation set.[file:2]
+
+### Relation to Commercial Baselines
+
+For context, the project also evaluates commercial ASR systems (such as Gemini-2.5-flash and Sarvam SARA v3) on the same Hinglish technical test data as domain-specific benchmarks.[file:2] The Optuna-tuned Whisper-medium + LoRA model achieves performance that is competitive with or better than these baselines in this setting, despite using a parameter-efficient fine-tuning approach.
+
+WER on the Hinglish technical tutorial domain (same test set):
+
+| Model                               | Type               | WER (↓) |
+|-------------------------------------|--------------------|--------:|
+| Whisper-medium (baseline)           | Open-source, no FT |  70.62  |
+| Whisper-medium + LoRA (Optuna best) | Open-source, tuned |  36.46  |
+| Gemini-2.5-flash                    | Commercial ASR     |  60.67  |
+| Sarvam-ai SARA v3                   | Commercial ASR     |  44.35  |
+
+On this Hinglish technical benchmark, the Optuna-tuned Whisper-medium + LoRA model outperforms both evaluated commercial ASR systems in terms of WER, while being trainable with a parameter-efficient setup on a single GPU.
+
 ## Background
 
 Hinglish (Hindi–English) code-mixed speech is ubiquitous in India but remains under-served by off-the-shelf ASR systems, particularly for technical content where English terminology is embedded in Hindi grammar and often written across scripts.[file:2] This project focuses on building a stronger ASR model for such code-mixed technical tutorials.
@@ -68,40 +102,6 @@ Each Optuna trial:
 4. At step 100, computes a quick WER on a subset of validation samples and reports it to the pruner.
 5. Either prunes the trial early or continues to 200 steps.
 6. Evaluates final WER/CER on 100 validation samples for the objective value.[file:1]
-
-## Results
-
-All headline metrics below are computed on a 100-sample evaluation set.
-
-### Whisper Baseline vs LoRA Fine-Tuning
-
-| Model                                   | Setting                           | WER (↓) | CER (↓) |
-|-----------------------------------------|------------------------------------|--------:|--------:|
-| Whisper-medium (baseline)               | Pretrained, no fine-tuning        |  70.62  |  54.92  |
-| Whisper-medium + LoRA (3k samples)      | LoRA fine-tune, 3k training samples |  54.22  |  40.98  |
-| Whisper-medium + LoRA (Optuna best)     | Optuna-selected config, 10k samples |  36.46  |  30.94  |
-
-[file:2]
-
-Key observations:
-
-- LoRA fine-tuning alone provides a substantial improvement over the baseline Whisper-medium model.
-- The best Optuna-tuned configuration achieves a **~34 absolute WER reduction** relative to the baseline (from 70.62 to 36.46), representing a large relative error drop on this evaluation set.[file:2]
-
-### Relation to Commercial Baselines
-
-For context, the project also evaluates commercial ASR systems (such as Gemini-2.5-flash and Sarvam SARA v3) on the same Hinglish technical test data as domain-specific benchmarks.[file:2] The Optuna-tuned Whisper-medium + LoRA model achieves performance that is competitive with or better than these baselines in this setting, despite using a parameter-efficient fine-tuning approach.
-
-WER on the Hinglish technical tutorial domain (same test set):
-
-| Model                               | Type               | WER (↓) |
-|-------------------------------------|--------------------|--------:|
-| Whisper-medium (baseline)           | Open-source, no FT |  70.62  |
-| Whisper-medium + LoRA (Optuna best) | Open-source, tuned |  36.46  |
-| Gemini-2.5-flash                    | Commercial ASR     |  60.67  |
-| Sarvam-ai SARA v3                   | Commercial ASR     |  44.35  |
-
-On this Hinglish technical benchmark, the Optuna-tuned Whisper-medium + LoRA model outperforms both evaluated commercial ASR systems in terms of WER, while being trainable with a parameter-efficient setup on a single GPU.
 
 ## What This Repository Contains
 
