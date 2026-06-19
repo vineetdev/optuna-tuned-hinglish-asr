@@ -143,17 +143,6 @@ For recruiters or readers who want to see the pipeline without running the full 
 
 This path is designed to showcase the modeling and optimization logic without requiring the full compute used for the original experiments.[file:1]
 
-### Full Reproduction (Optional)
-
-To approximate the full experimental setup (hyperparameter search + final training), follow the staged plan embedded in the notebook:
-
-- **Phase 1:** Baseline evaluation for multiple models (Whisper variants and commercial baselines, where applicable).
-- **Phase 2:** Run the Optuna hyperparameter search (6 trials × 200 steps on 1,000 samples each).
-- **Phase 3:** Fine-tune Whisper-medium with the best Optuna configuration on 10,000 samples for 1,000 steps.
-- **Phase 4:** Evaluate the final model on 10- and 100-sample test sets with detailed qualitative error analysis.[file:1][file:2]
-
-This end-to-end run is more compute-intensive but demonstrates the full rigor of the ASR experimentation workflow.
-
 ## Hardware & Requirements
 
 The original experiments were run on a cloud GPU environment comparable to a **Tesla T4 (16 GB VRAM)**.[file:1] With the parameter-efficient LoRA setup and mixed-precision training, the pipeline is designed to:
@@ -162,14 +151,5 @@ The original experiments were run on a cloud GPU environment comparable to a **T
 - Keep most of the Whisper-medium parameters frozen, updating only a small LoRA adapter subset.
 
 For quick demos and partial runs, a smaller GPU (or even CPU-only for inference only) can be used, but full HPO and fine-tuning are recommended on a GPU with at least 12–16 GB of VRAM.[file:1]
-
-## How This Project Positions You
-
-This repository is intended to demonstrate the following capabilities for Applied Scientist / Data Scientist (NLP/ASR) roles:
-
-- Ability to **specialize large speech models** (Whisper-medium) for under-served, code-mixed scenarios like Hinglish technical tutorials.
-- Experience with **parameter-efficient fine-tuning (LoRA)** on large encoder–decoder models under realistic hardware constraints.[file:1][file:2]
-- Familiarity with **rigorous hyperparameter optimization using Optuna**, including custom objective functions, pruning strategies, and evaluation pipelines.[file:1]
-- Comfort working with **Hugging Face datasets, Transformers, and evaluation tooling** for building end-to-end ASR experiments.
 
 Readers who want a deeper, report-style narrative of the project can open `Hinglish_ASR_Project_Report.docx`, while the notebook serves as the executable artifact showcasing the full training and evaluation flow.[file:2]
