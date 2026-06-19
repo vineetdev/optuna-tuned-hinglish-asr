@@ -153,3 +153,6 @@ The original experiments were run on a cloud GPU environment comparable to a **T
 For quick demos and partial runs, a smaller GPU (or even CPU-only for inference only) can be used, but full HPO and fine-tuning are recommended on a GPU with at least 12–16 GB of VRAM.[file:1]
 
 Readers who want a deeper, report-style narrative of the project can open `Hinglish_ASR_Project_Report.docx`, while the notebook serves as the executable artifact showcasing the full training and evaluation flow.[file:2]
+
+## Contact Developer 
+Email me at communication.vineet@gmail.com 
